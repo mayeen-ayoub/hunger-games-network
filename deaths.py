@@ -8,10 +8,30 @@ deaths_filepath = os.path.join('data', 'deaths.csv')
 df = pd.read_csv(deaths_filepath)
 G = nx.DiGraph()
 
+highlighted_edges = {
+  ('Marvel', 'F7'),
+  ('Marvel', 'M8'),
+  ('Marvel', 'F9'),
+  ('Glimmer', 'F10'),
+  ('Glimmer', 'F6'),
+  ('Glimmer', 'M5'),
+  ('Cato', 'Jason'),
+  ('Cato', 'M4'),
+  ('Clove', 'M9'),
+  ('F4', 'F3'),
+  ('M5', 'F3'),
+  ('Thresh', 'M7')
+}
+
 for i in range(len(df)):
   killer = df['Killer'][i] 
-  killed = df['Killed'][i] 
-  G.add_edge(killer, killed)  
+  killed = df['Killed'][i]
+
+  colour = 'black'
+  if (killer, killed) in highlighted_edges:
+    colour = 'red'
+
+  G.add_edge(killer, killed, color=colour)  
 
 pos = {
   'Katniss': (-0.5, -0.5), 'Peeta': (1, 1.5), 'Rue': (-1, -0.5), 'Thresh': (-2, -0.5),
@@ -52,15 +72,15 @@ for node in G.nodes():
   else: 
     G.nodes[node]['color'] = 'wheat'
     G.nodes[node]['font_color'] = 'black'
-  
+
 plt.figure(figsize=(8, 6))
 
+edge_colours = nx.get_edge_attributes(G, 'color').values()
 node_colours = nx.get_node_attributes(G, 'color').values()
 white_font_nodes = [n for n in G.nodes() if G.nodes[n]['font_color'] == 'white']
 black_font_nodes = [n for n in G.nodes() if G.nodes[n]['font_color'] == 'black']
 
-plt.figure(figsize=(8, 6))
-nx.draw_networkx(G, pos, with_labels=False, node_size=3000, node_color=node_colours, edgecolors='black')    
+nx.draw_networkx(G, pos, with_labels=False, edge_color=edge_colours, node_size=3000, node_color=node_colours, edgecolors='black')    
 nx.draw_networkx_labels(G, pos, labels={n: labels.get(n, '') for n in white_font_nodes}, font_color='white', font_size=10)
 nx.draw_networkx_labels(G, pos, labels={n: labels.get(n, '') for n in black_font_nodes}, font_color='black', font_size=10)
 plt.show()
