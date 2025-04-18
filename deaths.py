@@ -4,29 +4,66 @@ import matplotlib.pyplot as plt
 import os
 import re
 
+# read the data from deaths.csv 
 deaths_filepath = os.path.join('data', 'deaths.csv')
 df = pd.read_csv(deaths_filepath)
 G = nx.DiGraph()
 
+# CHANGEABLE VARIABLE
 highlighted_edges = {
-  ('Marvel', 'F7'),
-  ('Marvel', 'M8'),
-  ('Marvel', 'F9'),
-  ('Glimmer', 'F10'),
-  ('Glimmer', 'F6'),
-  ('Glimmer', 'M5'),
-  ('Cato', 'Jason'),
-  ('Cato', 'M4'),
-  ('Clove', 'M9'),
-  ('F4', 'F3'),
-  ('M5', 'F3'),
-  ('Thresh', 'M7')
+  # PART 3 - Cornucopia
+  # ('Marvel', 'F7'),
+  # ('Marvel', 'M8'),
+  # ('Marvel', 'F9'),
+  # ('Glimmer', 'F10'),
+  # ('Glimmer', 'F6'),
+  # ('Glimmer', 'M5'),
+  # ('Cato', 'Jason'),
+  # ('Cato', 'M4'),
+  # ('Clove', 'M9'),
+  # ('F4', 'F3'),
+  # ('M5', 'F3'),
+  # ('Thresh', 'M7')
+
+  # PART 4 - Career kills
+  # ('Marvel', 'F7'),
+  # ('Marvel', 'M8'),
+  # ('Marvel', 'F9'),
+  # ('Marvel', 'M10'),
+  # ('Marvel', 'M3'),
+  # ('Marvel', 'F8'),
+  # ('Marvel', 'Rue'),
+  # ('Glimmer', 'F10'),
+  # ('Glimmer', 'F6'),
+  # ('Glimmer', 'M5'),
+  # ('Glimmer', 'F8'),
+  # ('Cato', 'Jason'),
+  # ('Cato', 'M4'),
+  # ('Cato', 'M10'),
+  # ('Cato', 'M3'),
+  # ('Cato', 'F8'),
+  # ('Clove', 'M9'),
+  # ('Clove', 'M10'),
+  # ('Clove', 'M3'),
+  # ('Clove', 'F8'),
+
+  # PART 4 - Poorer district kills
+  # ('Katniss', 'Marvel'),
+  # ('Katniss', 'Cato'),
+  # ('Katniss', 'Glimmer'),
+  # ('Katniss', 'F4'),
+  # ('Peeta', 'F8'),
+  # ('Peeta', 'Cato'),
+  # ('Thresh', 'M7')
 }
 
 # CHANGEABLE VARIABLE
 imp_people = set()
+
+# PART 5
 # imp_people = {'Katniss', 'Marvel', 'Rue'}
 
+# add the edges to the graph
 for i in range(len(df)):
   killer = df['Killer'][i] 
   killed = df['Killed'][i]
@@ -38,6 +75,7 @@ for i in range(len(df)):
   if len(imp_people) == 0 or killer in imp_people and killed in imp_people:
     G.add_edge(killer, killed, color=colour)  
 
+# position the nodes on the canvas (custom layout)
 pos = {
   'Katniss': (-0.5, -0.5), 'Peeta': (1, 1.5), 'Rue': (-1, -0.5), 'Thresh': (-2, -0.5),
   'Clove': (-2, 1.5), 'Marvel': (-0.5, 1.5), 'Cato': (0.5, 1.5), 'Glimmer': (1.5, 1.5),
@@ -48,6 +86,7 @@ pos = {
   'Cinna': (-1.5, -1.5), 'Effie': (0.5, -1.5), 'Primrose': (-1, -2), 'Gale': (1, -1.5), 'Katniss\' mom': (-0.5, -1.5)
 }
 
+# rename the nodes to include district numbers
 labels = {
   'Katniss': 'Katniss\nD12', 'Peeta': 'Peeta\nD12', 'Rue': 'Rue\nD11', 'Thresh': 'Thresh\nD11',
   'Clove': 'Clove\nD2', 'Marvel': 'Marvel\nD1', 'Cato': 'Cato\nD2', 'Glimmer': 'Glimmer\nD1',
@@ -64,6 +103,7 @@ greyscale = [
   '#BBBBBB', '#D0D0D0', '#E4E4E4', '#F8F8F8'
 ]
 
+# recolour the nodes based on district number 
 for node in G.nodes():
   label = labels.get(node, '')
   match = re.search(r'D(\d+)', label)
@@ -75,6 +115,7 @@ for node in G.nodes():
     else:
       G.nodes[node]['font_color'] = 'black'
   else: 
+    # if this is a non-tribute, colour the node orange
     G.nodes[node]['color'] = 'wheat'
     G.nodes[node]['font_color'] = 'black'
 
@@ -85,6 +126,7 @@ node_colours = nx.get_node_attributes(G, 'color').values()
 white_font_nodes = [n for n in G.nodes() if G.nodes[n]['font_color'] == 'white']
 black_font_nodes = [n for n in G.nodes() if G.nodes[n]['font_color'] == 'black']
 
+# draw the graph using the node and edge properties set earlier 
 nx.draw_networkx(G, pos, with_labels=False, edge_color=edge_colours, node_size=3000, node_color=node_colours, edgecolors='black')    
 nx.draw_networkx_labels(G, pos, labels={n: labels.get(n, '') for n in white_font_nodes}, font_color='white', font_size=10)
 nx.draw_networkx_labels(G, pos, labels={n: labels.get(n, '') for n in black_font_nodes}, font_color='black', font_size=10)

@@ -1,3 +1,5 @@
+# Note: This file was used to generate the valence graphs used in the paper
+
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -8,17 +10,21 @@ import re
 curr_valences = {}
 deaths = set()
 
-# VARIABLES THAT CAN BE CHANGED
+# CHANGEABLE VARIABLES
 checkpoints = ['00:00:00', '00:27:00', '01:04:00', '1:07:00', '01:24:00', '1:39:00', '1:51:30', '02:17:00']
-# checkpoints = ['00:00:00', '02:17:00']
 imp_people = set()
 
+# PART 1
+# imp_people = {'Katniss', 'Peeta', 'Haymitch'}
+# imp_people = {'Katniss', 'Peeta', 'Gale'}
+
+# PART 2
+# imp_people = {'Peeta', 'Glimmer', 'Clove', 'Cato', 'Marvel'}
+# imp_people = {'Cato', 'Jason'}
+
+# PART 4
 # imp_people = {'Peeta', 'Glimmer', 'Clove', 'Cato', 'Marvel'}
 # imp_people = {'Katniss', 'Peeta', 'Rue'}
-
-# imp_people = {'Katniss', 'Peeta', 'Haymitch'}
-# imp_people = {'Cato', 'Jason'}
-# imp_people = {'Katniss', 'Foxface'}
 
 # PART 5
 # imp_people = {'Katniss', 'Rue', 'Clove', 'Cato', 'Marvel'}
@@ -35,12 +41,16 @@ imp_people = set()
 # imp_people = {'Peeta', 'Katniss', 'Cato'}
 # imp_people = {'President Snow', 'Seneca', 'Katniss'}
 
+# read the data from valences.csv 
 valences_filepath = os.path.join('data', 'valences.csv')
 df = pd.read_csv(valences_filepath)
 
+# add the nodes to the graph
 def add_nodes(G):
+  # read the data from characters.csv
   characters_filepath = os.path.join('data', 'characters.csv')
   characters_df = pd.read_csv(characters_filepath)
+  # add a node for each entry unless the character has died by this point or they are not in imp_people
   for col, row in characters_df.iterrows():
     global imp_people
     if len(imp_people) != 0 and row['Character'] not in imp_people:
@@ -50,16 +60,18 @@ def add_nodes(G):
       G.add_node(row['Character'])
 
 
-# EDGES ACCUMULATE
+# add the edges to the graph
 def add_edges(G, checkpoint_start_time, checkpoint_end_time):
   for col, row in df.iterrows():
     acting_node = row['Acting Character']  
     receiving_node = row['Receiving Character']  
+    # do not add this edge if the nodes are not in the graph
     global imp_people
     if len(imp_people) != 0 and (acting_node not in imp_people or receiving_node not in imp_people):
       continue
     row_start_time = datetime.strptime(row['Time Start'], '%H:%M:%S').time()
     row_end_time = datetime.strptime(row['Time End'], '%H:%M:%S').time()
+    # only add the edge if we have reached that point in time or it's an existing alliance
     if (((checkpoint_start_time <= row_start_time <= checkpoint_end_time) or (checkpoint_start_time <= row_end_time <= checkpoint_end_time) or (row_start_time <= checkpoint_start_time <= row_end_time and row_start_time <= checkpoint_end_time <= row_end_time))):
       if (acting_node != receiving_node):
         sorted_characters = [acting_node, receiving_node]
@@ -72,17 +84,19 @@ def add_edges(G, checkpoint_start_time, checkpoint_end_time):
           global deaths
           deaths.add(receiving_node)
 
+        # colour the edge according to its valence
         if (G[acting_node][receiving_node]['weight'] < 0):
           G[acting_node][receiving_node]['color'] = 'red'
         elif (G[acting_node][receiving_node]['weight'] == 0):
           G[acting_node][receiving_node]['color'] = 'black'
         else: 
           G[acting_node][receiving_node]['color'] = 'green'
+  # if there are any neutral edges (ie. with weight 0) set their weight to 1 to ensure it shows in the graph
   for u, v in G.edges():
     if (G[u][v]['weight'] == 0):
       G[u][v]['weight'] = 1
 
-
+# create a graph for each part (based on checkpoints)
 def create_graphs():
   for i in range(len(checkpoints) - 1):
     G = nx.Graph()
@@ -92,6 +106,7 @@ def create_graphs():
 
     add_edges(G, checkpoint_start_time, checkpoint_end_time)
 
+    # position the nodes on the canvas (custom layout)
     pos = {
       'Katniss': (-0.5, -0.5), 'Peeta': (0, 1), 'Rue': (-1.5, -0.5), 'Thresh': (-2, -0.5),
       'Clove': (-1.2, 2), 'Marvel': (-0.5, 1.5), 'Cato': (0.5, 2), 'Glimmer': (1.5, 1.5),
@@ -102,6 +117,7 @@ def create_graphs():
       'Cinna': (-1.5, -1.5), 'Effie': (0.5, -1.5), 'Primrose': (-1, -2), 'Gale': (1, -1.5), 'Katniss\' mom': (-0.5, -1.5)
     }
 
+    # rename the nodes to include district numbers
     labels = {
       'Katniss': 'Katniss\nD12', 'Peeta': 'Peeta\nD12', 'Rue': 'Rue\nD11', 'Thresh': 'Thresh\nD11',
       'Clove': 'Clove\nD2', 'Marvel': 'Marvel\nD1', 'Cato': 'Cato\nD2', 'Glimmer': 'Glimmer\nD1',
@@ -118,6 +134,7 @@ def create_graphs():
       '#BBBBBB', '#D0D0D0', '#E4E4E4', '#F8F8F8'
     ]
 
+    # recolour the nodes based on district number 
     for node in G.nodes():
       label = labels.get(node, '')
       match = re.search(r'D(\d+)', label)
@@ -129,6 +146,7 @@ def create_graphs():
         else:
           G.nodes[node]['font_color'] = 'black'
       else: 
+        # if this is a non-tribute, colour the node orange
         G.nodes[node]['color'] = 'wheat'
         G.nodes[node]['font_color'] = 'black'
      
@@ -140,6 +158,7 @@ def create_graphs():
     white_font_nodes = [n for n in G.nodes() if G.nodes[n]['font_color'] == 'white']
     black_font_nodes = [n for n in G.nodes() if G.nodes[n]['font_color'] == 'black']
 
+    # draw the graph using the node and edge properties set earlier 
     nx.draw_networkx(G, pos, with_labels=False, width=list(weights), edge_color=edge_colours, node_size=3000, node_color=node_colours, edgecolors='black')    
     nx.draw_networkx_labels(G, pos, labels={n: labels.get(n, '') for n in white_font_nodes}, font_color='white', font_size=10)
     nx.draw_networkx_labels(G, pos, labels={n: labels.get(n, '') for n in black_font_nodes}, font_color='black', font_size=10)

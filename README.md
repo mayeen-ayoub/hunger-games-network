@@ -29,6 +29,6 @@ hunger-games-network
 │   └── valences.csv
 ├── deaths.py
 ├── triangle_stability.py
-├── valences_circular.py
-└── valences_manual.py
+├── valences_circular_layout.py
+└── valences_custom_layout.py
 ```
