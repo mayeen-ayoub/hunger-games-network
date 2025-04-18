@@ -14,6 +14,9 @@ For any of the Python code, the following variables can be changed:
 	- `imp_people = {'Peeta', 'Katniss', 'Cato'}` will only generate edges between Peeta, Katniss and Cato for each checkpoint
 - **Note:** `deaths.py` does not have `checkpoints` variable and `triangle_stability.py` does not have `imp_people` variable
 
+For `triangle_stability.py`:
+- Modify `stable_first` to `True` if you want to see the triangles that changed from stable to unstable
+- Modify `stable_first` to `False` if you want to see the triangles that changed from unstable to stable
 
 
 ## Repository Organization 🗂️
