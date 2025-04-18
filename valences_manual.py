@@ -5,22 +5,33 @@ from datetime import datetime
 import os
 import re
 
-# checkpoints = ['00:00:00', '00:27:00', '01:04:00', '1:07:00', '01:24:00', '1:39:00', '1:51:30', '02:17:00']
-checkpoints = ['00:00:00', '02:17:00']
-deaths = set()
+checkpoints = ['00:00:00', '00:27:00', '01:04:00', '1:07:00', '01:24:00', '1:39:00', '1:51:30', '02:17:00']
+# checkpoints = ['00:00:00', '02:17:00']
 
-# imp_people = {'Katniss', 'Rue', 'Clove', 'Cato', 'Marvel'}
+deaths = set()
+imp_people = set()
+
 # imp_people = {'Peeta', 'Glimmer', 'Clove', 'Cato', 'Marvel'}
-# imp_people = {'M3', 'Clove', 'Cato', 'Marvel'}
 # imp_people = {'Katniss', 'Peeta', 'Rue'}
-# imp_people = {'Peeta', 'Katniss', 'Cato'}
+
 # imp_people = {'Katniss', 'Peeta', 'Haymitch'}
 # imp_people = {'Cato', 'Jason'}
-# imp_people = {'President Snow', 'Seneca'}
-# imp_people = {'President Snow', 'Katniss'}
 # imp_people = {'Katniss', 'Foxface'}
 
-imp_people = set()
+# PART 5
+# imp_people = {'Katniss', 'Rue', 'Clove', 'Cato', 'Marvel'}
+# imp_people = {'F8', 'Clove', 'Cato', 'Marvel', 'Glimmer'}
+# imp_people = {'M10', 'Clove', 'Cato', 'Marvel'}
+# imp_people = {'M3', 'Clove', 'Cato', 'Marvel'}
+# imp_people = {'Katniss', 'Marvel', 'Rue'}
+
+# PART 6
+# imp_people = {'Katniss', 'Thresh', 'Rue'}
+# imp_people = {'Katniss', 'Thresh', 'Clove'}
+
+# PART 7
+# imp_people = {'Peeta', 'Katniss', 'Cato'}
+# imp_people = {'President Snow', 'Seneca', 'Katniss'}
 
 curr_valences = {}
 valences_filepath = os.path.join('data', 'valences.csv')
