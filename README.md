@@ -2,7 +2,7 @@
 
 Team 18 🚀
 
-## Running the code ▶️
+## Running the code 🛠️
 1. pip install pandas networkx matplotlib
 1. python <filename> (eg. python valences_manual.py)
 
