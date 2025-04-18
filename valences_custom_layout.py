@@ -114,7 +114,7 @@ def create_graphs():
       'M8': (-1.2, 0.5), 'F7': (-1.2, 1), 'F9': (-1.2, 0), 'M3': (-0.5, 2.5), 'M10': (-1.2, 2.5), 
       'M4': (1, 0.5), 'Jason': (1, 1), 'M5': (1.5, 0), 'F10': (2, 1), 'F6': (2, 0.5), 
       'Foxface': (1, -1), 'President Snow': (-2, -1.5), 'Seneca': (-2, -1), 'Haymitch': (0, -1.5), 
-      'Cinna': (-1.5, -1.5), 'Effie': (0.5, -1.5), 'Primrose': (-1, -2), 'Gale': (1, -1.5), 'Katniss\' mom': (-0.5, -1.5)
+      'Cinna': (-1.5, -1.5), 'Effie': (0.5, -1.5), 'Primrose': (-1, -1.5), 'Gale': (1, -1.5), 'Katniss\' mom': (-0.5, -1.5)
     }
 
     # rename the nodes to include district numbers

@@ -18,6 +18,8 @@ For `triangle_stability.py`:
 - Modify `stable_first` to `True` if you want to see the triangles that changed from stable to unstable
 - Modify `stable_first` to `False` if you want to see the triangles that changed from unstable to stable
 
+For `valences_custom_layout.py`:
+- Modify `pos` to change the layout and arrangement of the characters
 
 ## Repository Organization 🗂️
 ```bash
