@@ -23,6 +23,10 @@ highlighted_edges = {
   ('Thresh', 'M7')
 }
 
+# CHANGEABLE VARIABLE
+imp_people = set()
+# imp_people = {'Katniss', 'Marvel', 'Rue'}
+
 for i in range(len(df)):
   killer = df['Killer'][i] 
   killed = df['Killed'][i]
@@ -31,7 +35,8 @@ for i in range(len(df)):
   if (killer, killed) in highlighted_edges:
     colour = 'red'
 
-  G.add_edge(killer, killed, color=colour)  
+  if len(imp_people) == 0 or killer in imp_people and killed in imp_people:
+    G.add_edge(killer, killed, color=colour)  
 
 pos = {
   'Katniss': (-0.5, -0.5), 'Peeta': (1, 1.5), 'Rue': (-1, -0.5), 'Thresh': (-2, -0.5),

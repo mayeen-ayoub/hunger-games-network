@@ -3,8 +3,10 @@ import networkx as nx
 from datetime import datetime
 import os
 
-checkpoints = ['00:00:00', '00:27:00', '01:04:00', '1:07:00', '01:24:00', '1:39:00', '1:51:30', '02:17:00']
 triangle_stability = {} # False = unstable, True = stable
+
+# CHANGEABLE VARIABLE
+checkpoints = ['00:00:00', '00:27:00', '01:04:00', '1:07:00', '01:24:00', '1:39:00', '1:51:30', '02:17:00']
 
 # read the data from valences.csv 
 valences_filepath = os.path.join('data', 'valences.csv')
@@ -18,7 +20,7 @@ def add_nodes(G):
     G.add_node(row['Character'])
 
 def add_edges(G, checkpoint_end_time):
-    # Add the edges to the graph
+  # Add the edges to the graph
   temp_valences = {}
   for col, row in df.iterrows():
     acting_node = row['Acting Character']  

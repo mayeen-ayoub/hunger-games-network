@@ -4,9 +4,13 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import os
 
+deaths = set()
+curr_valences = {}
+
+# VARIABLES THAT CAN BE CHANGED
 checkpoints = ['00:00:00', '00:27:00', '01:04:00', '1:07:00', '01:24:00', '1:39:00', '1:51:30', '02:17:00']
 # checkpoints = ['00:00:00', '02:17:00']
-deaths = set()
+imp_people = set()
 
 # imp_people = {'Katniss', 'Rue', 'Clove', 'Cato', 'Marvel'}
 # imp_people = {'Peeta', 'Glimmer', 'Clove', 'Cato', 'Marvel'}
@@ -19,9 +23,6 @@ deaths = set()
 # imp_people = {'President Snow', 'Katniss'}
 # imp_people = {'Katniss', 'Foxface'}
 
-imp_people = set()
-
-curr_valences = {}
 valences_filepath = os.path.join('data', 'valences.csv')
 df = pd.read_csv(valences_filepath)
 
